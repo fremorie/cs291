@@ -18,6 +18,27 @@
 ////////////////////////////////////////////////////////////////////////////////
 /*global THREE, Coordinates, $, document, window, dat*/
 
+const BASE_WIDTH = 20 + 64 + 110;
+const BASE_HEIGHT = 4;
+const BASE_DEPTH = 2 * 77;
+
+const FOOT_HEIGHT = 52;
+const FOOT_DEPTH = 6;
+
+const LEG_WIDTH = 64;
+const LEG_HEIGHT = 52 + 334;
+const LEG_DEPTH = 6;
+
+const BODY_RADIUS = 116 / 2;
+const SPINE_HEIGHT = 390;
+const SPINE_RADIUS = 24 / 2;
+
+const TOTAL_HEIGHT = 70 + 10 + 40 + SPINE_HEIGHT + 160;
+const BIRD_HEIGHT = 70 + 10 + 40 + SPINE_HEIGHT + BODY_RADIUS;
+
+const BODY_BOTTOM_POSITION = TOTAL_HEIGHT - BIRD_HEIGHT;
+const SPINE_BOTTOM_POSITION = 160 - BODY_RADIUS;
+
 var camera, scene, renderer;
 var cameraControls, effectController;
 var clock = new THREE.Clock();
@@ -52,17 +73,6 @@ function init() {
 
 	fillScene();
 }
-
-const BASE_WIDTH = 20 + 64 + 110;
-const BASE_HEIGHT = 4;
-const BASE_DEPTH = 2 * 77;
-
-const FOOT_HEIGHT = 52;
-const FOOT_DEPTH = 6;
-
-const LEG_WIDTH = 64;
-const LEG_HEIGHT = 52 + 334;
-const LEG_DEPTH = 6;
 
 // Supporting frame for the bird - base + legs + feet
 function createSupport() {
@@ -115,6 +125,21 @@ function createBody() {
 	var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xA00000 } );
 	var cylinderMaterial = new THREE.MeshLambertMaterial( { color: 0x0000D0 } );
 
+	// BODY
+	const sphere = new THREE.Mesh(
+		new THREE.SphereGeometry(BODY_RADIUS, 32, 16), sphereMaterial);
+	sphere.position.x = 0;
+	sphere.position.y = BODY_RADIUS + BODY_BOTTOM_POSITION;
+	sphere.position.z = 0;
+	scene.add(sphere);
+
+	// SPINE
+	const cylinder = new THREE.Mesh(
+		new THREE.CylinderGeometry(SPINE_RADIUS, SPINE_RADIUS, SPINE_HEIGHT, 32), cylinderMaterial);
+	cylinder.position.x = 0;
+	cylinder.position.y = SPINE_HEIGHT / 2 + SPINE_BOTTOM_POSITION;
+	cylinder.position.z = 0;
+	scene.add(cylinder);
 }
 
 // Head of the bird - head + hat

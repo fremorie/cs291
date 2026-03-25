@@ -53,6 +53,17 @@ function init() {
 	fillScene();
 }
 
+const BASE_WIDTH = 20 + 64 + 110;
+const BASE_HEIGHT = 4;
+const BASE_DEPTH = 2 * 77;
+
+const FOOT_HEIGHT = 52;
+const FOOT_DEPTH = 6;
+
+const LEG_WIDTH = 64;
+const LEG_HEIGHT = 52 + 334;
+const LEG_DEPTH = 6;
+
 // Supporting frame for the bird - base + legs + feet
 function createSupport() {
 
@@ -60,32 +71,43 @@ function createSupport() {
 	// base
 	var cube;
 	cube = new THREE.Mesh(
-		new THREE.CubeGeometry( 20+64+110, 4, 2*77 ), cubeMaterial );
+		new THREE.CubeGeometry( BASE_WIDTH, BASE_HEIGHT, BASE_DEPTH ), cubeMaterial );
 	cube.position.x = -45;	// (20+32) - half of width (20+64+110)/2
-	cube.position.y = 4/2;	// half of height
+	cube.position.y = BASE_HEIGHT / 2;	// half of height
 	cube.position.z = 0;	// centered at origin
 	scene.add( cube );
 
 	// left foot
 	cube = new THREE.Mesh(
-		new THREE.CubeGeometry( 20+64+110, 52, 6 ), cubeMaterial );
+		new THREE.CubeGeometry( BASE_WIDTH, FOOT_HEIGHT, FOOT_DEPTH ), cubeMaterial );
 	cube.position.x = -45;	// (20+32) - half of width (20+64+110)/2
-	cube.position.y = 52/2;	// half of height
-	cube.position.z = 77 + 6/2;	// offset 77 + half of depth 6/2
+	cube.position.y = FOOT_HEIGHT / 2;	// half of height
+	cube.position.z = BASE_DEPTH / 2 + FOOT_DEPTH / 2;	// offset 77 + half of depth 6/2
 	scene.add( cube );
 
 	// left leg
 	cube = new THREE.Mesh(
-		new THREE.CubeGeometry( 64, 334+52, 6 ), cubeMaterial );
-	cube.position.x = 0;	// centered on origin along X
-	cube.position.y = (334+52)/2;
-	cube.position.z = 77 + 6/2;	// offset 77 + half of depth 6/2
+		new THREE.CubeGeometry( LEG_WIDTH, LEG_HEIGHT, LEG_DEPTH ), cubeMaterial );
+	cube.position.x = 0; // centered on origin along X
+	cube.position.y = LEG_HEIGHT / 2;
+	cube.position.z = BASE_DEPTH / 2 + LEG_DEPTH / 2;	// offset 77 + half of depth 6/2
 	scene.add( cube );
 
 	// right foot
+	cube = new THREE.Mesh(
+		new THREE.CubeGeometry( BASE_WIDTH, FOOT_HEIGHT, FOOT_DEPTH ), cubeMaterial );
+	cube.position.x = -45; // (20+32) - half of width (20+64+110)/2
+	cube.position.y = FOOT_HEIGHT / 2;
+	cube.position.z = - BASE_DEPTH / 2 - FOOT_DEPTH / 2;
+	scene.add( cube );
 
 	// right leg
-
+	cube = new THREE.Mesh(
+		new THREE.CubeGeometry( LEG_WIDTH, LEG_HEIGHT, LEG_DEPTH ), cubeMaterial );
+	cube.position.x = 0; // centered on origin along X
+	cube.position.y = LEG_HEIGHT / 2;
+	cube.position.z = - BASE_DEPTH / 2 - LEG_DEPTH / 2;
+	scene.add( cube );
 }
 
 // Body of the bird - body and the connector of body and head

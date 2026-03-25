@@ -16,6 +16,8 @@ var gridZ = false;
 var axes = false;
 var ground = true;
 
+const CUP_Y = 1525;
+
 function createStairs() {
 
 	// MATERIALS
@@ -42,23 +44,31 @@ function createStairs() {
 	var stepHorizontal = new THREE.CubeGeometry(stepWidth, stepThickness, horizontalStepDepth);
 	var stepMesh;
 
-	// Make and position the vertical part of the step
-	stepMesh = new THREE.Mesh( stepVertical, stepMaterialVertical );
-	// The position is where the center of the block will be put.
-	// You can define position as THREE.Vector3(x, y, z) or in the following way:
-	stepMesh.position.x = 0;			// centered at origin
-	stepMesh.position.y = verticalStepHeight/2;	// half of height: put it above ground plane
-	stepMesh.position.z = 0;			// centered at origin
-	scene.add( stepMesh );
+	let currentHeight = 0;
+	let currentDepth = 0;
 
-	// Make and position the horizontal part
-	stepMesh = new THREE.Mesh( stepHorizontal, stepMaterialHorizontal );
-	stepMesh.position.x = 0;
-	// Push up by half of horizontal step's height, plus vertical step's height
-	stepMesh.position.y = stepThickness/2 + verticalStepHeight;
-	// Push step forward by half the depth, minus half the vertical step's thickness
-	stepMesh.position.z = horizontalStepDepth/2 - stepHalfThickness;
-	scene.add( stepMesh );
+	 while (currentHeight < CUP_Y - stepThickness / 2) {
+		// Make and position the vertical part of the step
+		stepMesh = new THREE.Mesh( stepVertical, stepMaterialVertical );
+		// The position is where the center of the block will be put.
+		// You can define position as THREE.Vector3(x, y, z) or in the following way:
+		stepMesh.position.x = 0;			// centered at origin
+		stepMesh.position.y = currentHeight + verticalStepHeight/2;	// half of height: put it above ground plane
+		stepMesh.position.z = currentDepth;			// centered at origin
+		scene.add( stepMesh );
+
+		// Make and position the horizontal part
+		stepMesh = new THREE.Mesh( stepHorizontal, stepMaterialHorizontal );
+		stepMesh.position.x = 0;
+		// Push up by half of horizontal step's height, plus vertical step's height
+		stepMesh.position.y = currentHeight + stepThickness/2 + verticalStepHeight;
+		// Push step forward by half the depth, minus half the vertical step's thickness
+		stepMesh.position.z = currentDepth + horizontalStepDepth/2 - stepHalfThickness;
+		scene.add( stepMesh );
+
+		currentHeight += stepSize + stepThickness;
+		currentDepth += horizontalStepDepth - stepThickness;
+	}
 }
 
 function createCup() {
@@ -73,7 +83,7 @@ function createCup() {
 	cupGeo = new THREE.CylinderGeometry( 100, 100, 50, 32 );
 	cup = new THREE.Mesh( cupGeo, cupMaterial );
 	cup.position.x = 0;
-	cup.position.y = 1525;
+	cup.position.y = CUP_Y;
 	cup.position.z = 1925;
 	scene.add( cup );
 }

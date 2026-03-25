@@ -14,7 +14,7 @@ var camera, scene, renderer;
 var windowScale;
 
 function PolygonGeometry(sides) {
-	var geo = new THREE.Geometry();
+	var geometry = new THREE.Geometry();
 
 	// generate vertices
 	for ( var pt = 0 ; pt < sides; pt++ )
@@ -25,15 +25,15 @@ function PolygonGeometry(sides) {
 		var x = Math.cos( angle );
 		var y = Math.sin( angle );
 
-		// YOUR CODE HERE
-		//Save the vertex location - fill in the code
-
+		geometry.vertices.push( new THREE.Vector3(x, y, 0) );
 	}
-	// YOUR CODE HERE
-	// Write the code to generate minimum number of faces for the polygon.
+
+	for (let face = 0; face < sides - 2; face++) {
+		geometry.faces.push(new THREE.Face3(0, face + 1, face + 2));
+	}
 
 	// Return the geometry object
-	return geo;
+	return geometry;
 }
 
 function init() {

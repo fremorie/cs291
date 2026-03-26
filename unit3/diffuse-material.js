@@ -45,7 +45,7 @@ function init() {
 
 function createBall() {
 	// Do not change the color itself, change the material and use the ambient and diffuse components.
-	var material = new THREE.MeshLambertMaterial( { color: 0x80FC66, shading: THREE.FlatShading } );
+	var material = new THREE.MeshLambertMaterial( { color: 0x80FC66 } );
 
 	let k = 0.4;
 	material.ambient.setRGB( material.color.r * k, material.color.g * k, material.color.b * k );

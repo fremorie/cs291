@@ -36,8 +36,21 @@ const SPINE_RADIUS = 24 / 2;
 const TOTAL_HEIGHT = 70 + 10 + 40 + SPINE_HEIGHT + 160;
 const BIRD_HEIGHT = 70 + 10 + 40 + SPINE_HEIGHT + BODY_RADIUS;
 
-const BODY_BOTTOM_POSITION = TOTAL_HEIGHT - BIRD_HEIGHT;
-const SPINE_BOTTOM_POSITION = 160 - BODY_RADIUS;
+const SPINE_BOTTOM_POSITION = 160;
+const BODY_BOTTOM_POSITION = SPINE_BOTTOM_POSITION;
+
+const HAT_HEIGHT = 70;
+const HAT_RIM_HEIGHT = 10;
+const HAT_TOTAL_HEIGHT = HAT_HEIGHT + HAT_RIM_HEIGHT;
+const HAT_RADIUS = 80 / 2;
+const HAT_RIM_RADIUS = 142 / 2;
+
+const HEAD_RADIUS = 104 / 2;
+
+const HEAD_TOTAL_HEIGHT = HAT_TOTAL_HEIGHT + 40 + HEAD_RADIUS;
+const HEAD_BOTTOM_POSITION = TOTAL_HEIGHT - HEAD_TOTAL_HEIGHT;
+
+const HAT_BOTTOM_POSITION = TOTAL_HEIGHT - HAT_TOTAL_HEIGHT;
 
 var camera, scene, renderer;
 var cameraControls, effectController;
@@ -129,7 +142,7 @@ function createBody() {
 	const sphere = new THREE.Mesh(
 		new THREE.SphereGeometry(BODY_RADIUS, 32, 16), sphereMaterial);
 	sphere.position.x = 0;
-	sphere.position.y = BODY_RADIUS + BODY_BOTTOM_POSITION;
+	sphere.position.y = BODY_BOTTOM_POSITION;
 	sphere.position.z = 0;
 	scene.add(sphere);
 
@@ -146,6 +159,30 @@ function createBody() {
 function createHead() {
 	var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xA00000 } );
 	var cylinderMaterial = new THREE.MeshLambertMaterial( { color: 0x0000D0 } );
+
+	// HEAD
+	const sphere = new THREE.Mesh(
+		new THREE.SphereGeometry(HEAD_RADIUS, 32, 16), sphereMaterial);
+
+	sphere.position.x = 0;
+	sphere.position.y = HEAD_BOTTOM_POSITION + HEAD_RADIUS;
+	sphere.position.z = 0;
+	scene.add(sphere);
+
+	// HAT
+	let cylinder = new THREE.Mesh(
+		new THREE.CylinderGeometry(HAT_RADIUS, HAT_RADIUS, HAT_HEIGHT, 32), cylinderMaterial);
+	cylinder.position.x = 0;
+	cylinder.position.y = HAT_HEIGHT / 2 + HAT_BOTTOM_POSITION + HAT_RIM_HEIGHT;
+	cylinder.position.z = 0;
+	scene.add(cylinder);
+
+	cylinder = new THREE.Mesh(
+		new THREE.CylinderGeometry(HAT_RIM_RADIUS, HAT_RIM_RADIUS, HAT_RIM_HEIGHT, 32), cylinderMaterial);
+	cylinder.position.x = 0;
+	cylinder.position.y = HAT_BOTTOM_POSITION + HAT_RIM_HEIGHT / 2;
+	cylinder.position.z = 0;
+	scene.add(cylinder);
 
 }
 

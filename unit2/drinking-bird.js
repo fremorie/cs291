@@ -18,6 +18,40 @@
 ////////////////////////////////////////////////////////////////////////////////
 /*global THREE, Coordinates, $, document, window, dat*/
 
+const BASE_WIDTH = 20 + 64 + 110;
+const BASE_HEIGHT = 4;
+const BASE_DEPTH = 2 * 77;
+
+const FOOT_HEIGHT = 52;
+const FOOT_DEPTH = 6;
+
+const LEG_WIDTH = 64;
+const LEG_HEIGHT = 52 + 334;
+const LEG_DEPTH = 6;
+
+const BODY_RADIUS = 116 / 2;
+const SPINE_HEIGHT = 390;
+const SPINE_RADIUS = 24 / 2;
+
+const TOTAL_HEIGHT = 70 + 10 + 40 + SPINE_HEIGHT + 160;
+const BIRD_HEIGHT = 70 + 10 + 40 + SPINE_HEIGHT + BODY_RADIUS;
+
+const SPINE_BOTTOM_POSITION = 160;
+const BODY_BOTTOM_POSITION = SPINE_BOTTOM_POSITION;
+
+const HAT_HEIGHT = 70;
+const HAT_RIM_HEIGHT = 10;
+const HAT_TOTAL_HEIGHT = HAT_HEIGHT + HAT_RIM_HEIGHT;
+const HAT_RADIUS = 80 / 2;
+const HAT_RIM_RADIUS = 142 / 2;
+
+const HEAD_RADIUS = 104 / 2;
+
+const HEAD_TOTAL_HEIGHT = HAT_TOTAL_HEIGHT + 40 + HEAD_RADIUS;
+const HEAD_BOTTOM_POSITION = TOTAL_HEIGHT - HEAD_TOTAL_HEIGHT;
+
+const HAT_BOTTOM_POSITION = TOTAL_HEIGHT - HAT_TOTAL_HEIGHT;
+
 var camera, scene, renderer;
 var cameraControls, effectController;
 var clock = new THREE.Clock();
@@ -60,32 +94,43 @@ function createSupport() {
 	// base
 	var cube;
 	cube = new THREE.Mesh(
-		new THREE.CubeGeometry( 20+64+110, 4, 2*77 ), cubeMaterial );
+		new THREE.CubeGeometry( BASE_WIDTH, BASE_HEIGHT, BASE_DEPTH ), cubeMaterial );
 	cube.position.x = -45;	// (20+32) - half of width (20+64+110)/2
-	cube.position.y = 4/2;	// half of height
+	cube.position.y = BASE_HEIGHT / 2;	// half of height
 	cube.position.z = 0;	// centered at origin
 	scene.add( cube );
 
 	// left foot
 	cube = new THREE.Mesh(
-		new THREE.CubeGeometry( 20+64+110, 52, 6 ), cubeMaterial );
+		new THREE.CubeGeometry( BASE_WIDTH, FOOT_HEIGHT, FOOT_DEPTH ), cubeMaterial );
 	cube.position.x = -45;	// (20+32) - half of width (20+64+110)/2
-	cube.position.y = 52/2;	// half of height
-	cube.position.z = 77 + 6/2;	// offset 77 + half of depth 6/2
+	cube.position.y = FOOT_HEIGHT / 2;	// half of height
+	cube.position.z = BASE_DEPTH / 2 + FOOT_DEPTH / 2;	// offset 77 + half of depth 6/2
 	scene.add( cube );
 
 	// left leg
 	cube = new THREE.Mesh(
-		new THREE.CubeGeometry( 64, 334+52, 6 ), cubeMaterial );
-	cube.position.x = 0;	// centered on origin along X
-	cube.position.y = (334+52)/2;
-	cube.position.z = 77 + 6/2;	// offset 77 + half of depth 6/2
+		new THREE.CubeGeometry( LEG_WIDTH, LEG_HEIGHT, LEG_DEPTH ), cubeMaterial );
+	cube.position.x = 0; // centered on origin along X
+	cube.position.y = LEG_HEIGHT / 2;
+	cube.position.z = BASE_DEPTH / 2 + LEG_DEPTH / 2;	// offset 77 + half of depth 6/2
 	scene.add( cube );
 
 	// right foot
+	cube = new THREE.Mesh(
+		new THREE.CubeGeometry( BASE_WIDTH, FOOT_HEIGHT, FOOT_DEPTH ), cubeMaterial );
+	cube.position.x = -45; // (20+32) - half of width (20+64+110)/2
+	cube.position.y = FOOT_HEIGHT / 2;
+	cube.position.z = - BASE_DEPTH / 2 - FOOT_DEPTH / 2;
+	scene.add( cube );
 
 	// right leg
-
+	cube = new THREE.Mesh(
+		new THREE.CubeGeometry( LEG_WIDTH, LEG_HEIGHT, LEG_DEPTH ), cubeMaterial );
+	cube.position.x = 0; // centered on origin along X
+	cube.position.y = LEG_HEIGHT / 2;
+	cube.position.z = - BASE_DEPTH / 2 - LEG_DEPTH / 2;
+	scene.add( cube );
 }
 
 // Body of the bird - body and the connector of body and head
@@ -93,12 +138,51 @@ function createBody() {
 	var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xA00000 } );
 	var cylinderMaterial = new THREE.MeshLambertMaterial( { color: 0x0000D0 } );
 
+	// BODY
+	const sphere = new THREE.Mesh(
+		new THREE.SphereGeometry(BODY_RADIUS, 32, 16), sphereMaterial);
+	sphere.position.x = 0;
+	sphere.position.y = BODY_BOTTOM_POSITION;
+	sphere.position.z = 0;
+	scene.add(sphere);
+
+	// SPINE
+	const cylinder = new THREE.Mesh(
+		new THREE.CylinderGeometry(SPINE_RADIUS, SPINE_RADIUS, SPINE_HEIGHT, 32), cylinderMaterial);
+	cylinder.position.x = 0;
+	cylinder.position.y = SPINE_HEIGHT / 2 + SPINE_BOTTOM_POSITION;
+	cylinder.position.z = 0;
+	scene.add(cylinder);
 }
 
 // Head of the bird - head + hat
 function createHead() {
 	var sphereMaterial = new THREE.MeshLambertMaterial( { color: 0xA00000 } );
 	var cylinderMaterial = new THREE.MeshLambertMaterial( { color: 0x0000D0 } );
+
+	// HEAD
+	const sphere = new THREE.Mesh(
+		new THREE.SphereGeometry(HEAD_RADIUS, 32, 16), sphereMaterial);
+
+	sphere.position.x = 0;
+	sphere.position.y = HEAD_BOTTOM_POSITION + HEAD_RADIUS;
+	sphere.position.z = 0;
+	scene.add(sphere);
+
+	// HAT
+	let cylinder = new THREE.Mesh(
+		new THREE.CylinderGeometry(HAT_RADIUS, HAT_RADIUS, HAT_HEIGHT, 32), cylinderMaterial);
+	cylinder.position.x = 0;
+	cylinder.position.y = HAT_HEIGHT / 2 + HAT_BOTTOM_POSITION + HAT_RIM_HEIGHT;
+	cylinder.position.z = 0;
+	scene.add(cylinder);
+
+	cylinder = new THREE.Mesh(
+		new THREE.CylinderGeometry(HAT_RIM_RADIUS, HAT_RIM_RADIUS, HAT_RIM_HEIGHT, 32), cylinderMaterial);
+	cylinder.position.x = 0;
+	cylinder.position.y = HAT_BOTTOM_POSITION + HAT_RIM_HEIGHT / 2;
+	cylinder.position.z = 0;
+	scene.add(cylinder);
 
 }
 

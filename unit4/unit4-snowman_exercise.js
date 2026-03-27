@@ -13,6 +13,10 @@ var gridZ = false;
 var axes = true;
 var ground = true;
 
+const BOTTOM_SPHERE_RADIUS = 20;
+const MIDDLE_SPHERE_RADIUS = 15;
+const TOP_SPHERE_RADIUS = 10;
+
 function fillScene() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog( 0x808080, 2000, 4000 );
@@ -34,29 +38,27 @@ function fillScene() {
 	var woodMaterial = new THREE.MeshLambertMaterial( { color: 0x75691B } );
 
 	var sphere = new THREE.Mesh(
-		new THREE.SphereGeometry( 20, 32, 16 ), snowMaterial );
-	sphere.position.y = 20;
+		new THREE.SphereGeometry( BOTTOM_SPHERE_RADIUS, 32, 16 ), snowMaterial );
+	sphere.position.y = BOTTOM_SPHERE_RADIUS;
 	scene.add( sphere );
 
 	sphere = new THREE.Mesh(
-		new THREE.SphereGeometry( 15, 32, 16 ), snowMaterial );
-	sphere.position.y = 50;
+		new THREE.SphereGeometry( MIDDLE_SPHERE_RADIUS, 32, 16 ), snowMaterial );
+	sphere.position.y = BOTTOM_SPHERE_RADIUS + MIDDLE_SPHERE_RADIUS * 2;
 	scene.add( sphere );
 
 	sphere = new THREE.Mesh(
-		new THREE.SphereGeometry( 10, 32, 16 ), snowMaterial );
-	sphere.position.y = 70;
+		new THREE.SphereGeometry( TOP_SPHERE_RADIUS, 32, 16 ), snowMaterial );
+	sphere.position.y = BOTTOM_SPHERE_RADIUS + MIDDLE_SPHERE_RADIUS * 2 + TOP_SPHERE_RADIUS * 2;
 	scene.add( sphere );
 
 	var cylinder = new THREE.Mesh(
 		new THREE.CylinderGeometry( 2, 2, 60, 32 ), woodMaterial );
 
-	// YOUR CHANGES HERE
-	// These positions are given just so you can see the stick.
-	// You will need to reposition, etc.
-	cylinder.position.x = -20;
-	cylinder.position.y = 30;
-	cylinder.position.z = -55;
+	cylinder.position.x = 0;
+	cylinder.position.y = 50;
+	cylinder.position.z = 0;
+	cylinder.rotation.x = Math.PI / 2;
 
 	scene.add( cylinder );
 }

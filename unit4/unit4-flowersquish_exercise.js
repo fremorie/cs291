@@ -46,7 +46,7 @@ function fillScene() {
 
 		const petal = new THREE.Object3D();
 		petal.add( cylinder );
-		petal.rotation.z = Math.PI / 2;
+		petal.rotation.z = Math.PI / 2 - 20 * Math.PI / 180;
 		petal.rotation.y = (360 / petalCount) * i * Math.PI / 180;
 		petal.position.y = flowerHeight;
 

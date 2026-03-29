@@ -13,6 +13,11 @@ var gridZ = false;
 var axes = true;
 var ground = true;
 
+const flowerHeight = 200;
+const petalLength = 120;
+const stamenRadius = 20;
+const petalCount = 24;
+
 function fillScene() {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog( 0x808080, 2000, 4000 );
@@ -32,28 +37,27 @@ function fillScene() {
 
 	// FLOWER
 	var petalMaterial = new THREE.MeshLambertMaterial( { color: 0xCC5920 } );
-	var flowerHeight = 200;
-	var petalLength = 120;
 	var cylGeom = new THREE.CylinderGeometry( 15, 0, petalLength, 32 );
 	var flower = new THREE.Object3D();
 
-	/////////
-	// YOUR CODE HERE
-	// add code here to make 24 petals, radiating around the sphere
-	// Scales, rotates, and positions on the cylinder and petals are needed.
-	// The petals should be squished and be 1/4 as thick as wide
-	// and they should be tilted 20 degrees up from the position in the previous exercise
+	for (let i = 0; i < petalCount; i++) {
+		const cylinder = new THREE.Mesh( cylGeom, petalMaterial );
+		cylinder.position.y = petalLength / 2;
 
-	var cylinder = new THREE.Mesh( cylGeom, petalMaterial );
-	var petal = new THREE.Object3D();
-	petal.add( cylinder );
+		const petal = new THREE.Object3D();
+		petal.add( cylinder );
+		petal.rotation.z = Math.PI / 2 - 20 * Math.PI / 180;
+		petal.rotation.y = (360 / petalCount) * i * Math.PI / 180;
+		petal.position.y = flowerHeight;
+		petal.scale.setX(0.25);
 
-	flower.add( petal );
+		flower.add( petal );
+	}
 
 	// Rest of the flower
 	var stamenMaterial = new THREE.MeshLambertMaterial( { color: 0x333310 } );
 	var stamen = new THREE.Mesh(
-		new THREE.SphereGeometry( 20, 32, 16 ), stamenMaterial );
+		new THREE.SphereGeometry( stamenRadius, 32, 16 ), stamenMaterial );
 	stamen.position.y = flowerHeight;	// move to flower center
 	flower.add( stamen );
 

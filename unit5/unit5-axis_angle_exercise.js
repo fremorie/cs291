@@ -31,32 +31,59 @@ function fillScene() {
 	scene.add(light);
 	scene.add(light2);
 
-	var cylinderMaterial = new THREE.MeshPhongMaterial( { color: 0xD1F5FD, specular: 0xD1F5FD, shininess: 100 } );
+	const CYLINDERS = [
+		{
+			maxCorner: new THREE.Vector3(1, 1, 1),
+			minCorner: new THREE.Vector3(-1,-1,-1),
+			rotationAxis: new THREE.Vector3(1,0,-1),
+		},
+		{
+			maxCorner: new THREE.Vector3(-1, 1, -1),
+			minCorner: new THREE.Vector3(1,-1,1),
+			rotationAxis: new THREE.Vector3(-1,0,1),
+		},
+		{
+			maxCorner: new THREE.Vector3(-1, 1, 1),
+			minCorner: new THREE.Vector3(1,-1,-1),
+			rotationAxis: new THREE.Vector3(1,0,1),
+		},
+		{
+			maxCorner: new THREE.Vector3(1, 1, -1),
+			minCorner: new THREE.Vector3(-1, -1, 1),
+			rotationAxis: new THREE.Vector3(-1,0,-1),
+		},
+	]
 
-	// get two diagonally-opposite corners of the cube and compute the
-	// cylinder axis direction and length
-	var maxCorner = new THREE.Vector3(  1, 1, 1 );
-	var minCorner = new THREE.Vector3( -1,-1,-1 );
-	// note how you can chain one operation on to another:
-	var cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
-	var cylLength = cylAxis.length();
+	for (const cylinderProps of CYLINDERS) {
+		const cylinder = createCylinder(
+			cylinderProps.maxCorner,
+			cylinderProps.minCorner,
+			cylinderProps.rotationAxis,
+		);
 
-	// take dot product of cylAxis and up vector to get cosine of angle
+		scene.add( cylinder );
+	}
+}
+
+function createCylinder(maxCorner, minCorner, rotationAxis) {
+	debugger;
+	const cylinderMaterial = new THREE.MeshPhongMaterial( { color: 0xD1F5FD, specular: 0xD1F5FD, shininess: 100 } );
+	const cylAxis = new THREE.Vector3().subVectors( maxCorner, minCorner );
+	const cylLength = cylAxis.length();
+
 	cylAxis.normalize();
-	var theta = Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
-	// or just simply theta = Math.acos( cylAxis.y );
+	const theta = Math.acos( cylAxis.dot( new THREE.Vector3(0,1,0) ) );
 
-	// YOUR CODE HERE
-	var cylinder = new THREE.Mesh(
+	const cylinder = new THREE.Mesh(
 		new THREE.CylinderGeometry( 0.2, 0.2, cylLength, 32 ), cylinderMaterial );
-	var rotationAxis = new THREE.Vector3(1,0,-1);
+
 	// makeRotationAxis wants its axis normalized
 	rotationAxis.normalize();
 	// don't use position, rotation, scale
 	cylinder.matrixAutoUpdate = false;
 	cylinder.matrix.makeRotationAxis( rotationAxis, theta );
-	scene.add( cylinder );
 
+	return cylinder;
 }
 
 function drawHelpers() {

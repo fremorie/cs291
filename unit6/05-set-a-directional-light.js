@@ -208,6 +208,10 @@ function fillScene() {
 	eye.add( sphere );
 	eye.rotation.y = -20 * Math.PI / 180.0;
 	scene.add( eye );
+
+	const light = new THREE.DirectionalLight(0xFFFFFF, 1.5);
+	light.position.set(-200, 200, -400);
+	scene.add(light);
 }
 
 function init() {

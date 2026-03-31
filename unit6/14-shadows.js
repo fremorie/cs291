@@ -38,6 +38,8 @@ function init() {
 	// CONTROLS
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0,310,0);
+
+	renderer.shadowMapEnabled = true;
 }
 
 function fillScene() {
@@ -55,6 +57,7 @@ function fillScene() {
 	spotlight.angle = 20 * Math.PI / 180;
 	spotlight.exponent = 1;
 	spotlight.target.position.set( 0, 200, 0 );
+	spotlight.castShadow = true;
 	scene.add( spotlight );
 
 	var lightSphere = new THREE.Mesh(
@@ -76,6 +79,7 @@ function fillScene() {
 			polygonOffset: true, polygonOffsetFactor: 1.0, polygonOffsetUnits: 4.0
 		}));
 	solidGround.rotation.x = -Math.PI / 2;
+	solidGround.receiveShadow = true;
 
 	scene.add( solidGround );
 
